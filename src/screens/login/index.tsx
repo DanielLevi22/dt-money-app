@@ -1,14 +1,12 @@
 import { DismissKeyboardView } from "@/components/dismiss-keyboard-view";
-import type { PublicStackParamsList } from "@/routes/public-routes";
-import { useNavigation } from "@react-navigation/native";
-import type { StackNavigationProp } from "@react-navigation/stack";
-import { Text, TextInput, TouchableOpacity, View } from "react-native";
+import { View } from "react-native";
+import { LoginForm } from "./login-form";
 export const Login = () => {
-  const navigation =
-    useNavigation<StackNavigationProp<PublicStackParamsList>>();
   return (
-    <View className="flex-1 items-center justify-center">
-      <DismissKeyboardView />
+    <View className="flex-1 w-full self-center">
+      <DismissKeyboardView>
+        <LoginForm />
+      </DismissKeyboardView>
     </View>
   );
 };
