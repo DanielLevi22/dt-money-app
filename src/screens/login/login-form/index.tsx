@@ -15,7 +15,7 @@ export const LoginForm = () => {
 
   return (
     <>
-      <Input control={control} name="email" label="email" />
+      <Input control={control} name="email" label="Email" />
     </>
   );
 };
