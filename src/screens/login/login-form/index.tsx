@@ -15,7 +15,21 @@ export const LoginForm = () => {
 
   return (
     <>
-      <Input control={control} name="email" label="Email" />
+      <Input
+        control={control}
+        name="email"
+        label="EMAIL"
+        placeholder="mail@example.br"
+        leftIconName="mail-outline"
+      />
+      <Input
+        control={control}
+        name="password"
+        label="SENHA"
+        placeholder="Sua senha"
+        leftIconName="lock-outline"
+        secureTextEntry
+      />
     </>
   );
 };
