@@ -1,3 +1,4 @@
+import { AppButton } from "@/components/app-button";
 import { Input } from "@/components/input";
 import { useForm } from "react-hook-form";
 
@@ -30,6 +31,10 @@ export const LoginForm = () => {
         leftIconName="lock-outline"
         secureTextEntry
       />
+
+      <AppButton mode="outline" iconName="arrow-forward">
+        Login
+      </AppButton>
     </>
   );
 };
