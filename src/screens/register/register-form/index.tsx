@@ -5,17 +5,19 @@ import { useNavigation, type NavigationProp } from "@react-navigation/native";
 import { useForm } from "react-hook-form";
 import { Text, View } from "react-native";
 
-export interface FormLoginParams {
+interface FormRegisterParams {
   email: string;
+  name: string;
   password: string;
+  confirmPassword: string;
 }
 
-export const LoginForm = () => {
+export const RegisterForm = ({}) => {
   const {
     control,
     handleSubmit,
     formState: { isSubmitting },
-  } = useForm<FormLoginParams>();
+  } = useForm<FormRegisterParams>();
 
   const navigation = useNavigation<NavigationProp<PublicStackParamsList>>();
 
@@ -23,33 +25,40 @@ export const LoginForm = () => {
     <>
       <Input
         control={control}
+        name="name"
+        leftIconName="person"
+        label="NOME"
+        placeholder="Seu nome"
+      />
+      <Input
+        control={control}
         name="email"
-        label="EMAIL"
-        placeholder="mail@example.br"
         leftIconName="mail-outline"
+        label="EMAIL"
+        placeholder="mail@example.com"
       />
       <Input
         control={control}
         name="password"
+        leftIconName="mail-outline"
         label="SENHA"
-        placeholder="Sua senha"
-        leftIconName="lock-outline"
+        placeholder="Confirme sua senha"
         secureTextEntry
       />
 
       <View className="flex-1 justify-between mt-8 mb-6 min-h-[250px]">
-        <AppButton iconName="arrow-forward">Login</AppButton>
+        <AppButton iconName="arrow-forward">Cadastrar</AppButton>
 
         <View>
           <Text className="mb-6 text-gray-300 text-base">
-            Ainda nao possui uma conta ?
+            Ja possui uma conta ?
           </Text>
           <AppButton
-            onPress={() => navigation.navigate("register")}
+            onPress={() => navigation.navigate("login")}
             mode="outline"
             iconName="arrow-forward"
           >
-            Cadastrar
+            Acessar
           </AppButton>
         </View>
       </View>
