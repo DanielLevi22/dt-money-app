@@ -1,9 +1,11 @@
 import { AppButton } from "@/components/app-button";
 import { Input } from "@/components/input";
 import type { PublicStackParamsList } from "@/routes/public-routes";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigation, type NavigationProp } from "@react-navigation/native";
 import { useForm } from "react-hook-form";
 import { Text, View } from "react-native";
+import { schema } from "./ schame";
 
 interface FormRegisterParams {
   email: string;
@@ -17,7 +19,15 @@ export const RegisterForm = ({}) => {
     control,
     handleSubmit,
     formState: { isSubmitting },
-  } = useForm<FormRegisterParams>();
+  } = useForm<FormRegisterParams>({
+    defaultValues: {
+      name: "",
+      confirmPassword: "",
+      email: "",
+      password: "",
+    },
+    resolver: zodResolver(schema),
+  });
 
   const navigation = useNavigation<NavigationProp<PublicStackParamsList>>();
 

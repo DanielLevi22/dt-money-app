@@ -4,7 +4,8 @@ import type { PublicStackParamsList } from "@/routes/public-routes";
 import { useNavigation, type NavigationProp } from "@react-navigation/native";
 import { useForm } from "react-hook-form";
 import { Text, View } from "react-native";
-
+import { zodResolver } from "@hookform/resolvers/zod";
+import { schema } from "./schema";
 export interface FormLoginParams {
   email: string;
   password: string;
@@ -15,10 +16,17 @@ export const LoginForm = () => {
     control,
     handleSubmit,
     formState: { isSubmitting },
-  } = useForm<FormLoginParams>();
+  } = useForm<FormLoginParams>({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    resolver: zodResolver(schema),
+  });
 
   const navigation = useNavigation<NavigationProp<PublicStackParamsList>>();
 
+  const onSubmit = () => {};
   return (
     <>
       <Input
@@ -38,7 +46,9 @@ export const LoginForm = () => {
       />
 
       <View className="flex-1 justify-between mt-8 mb-6 min-h-[250px]">
-        <AppButton iconName="arrow-forward">Login</AppButton>
+        <AppButton iconName="arrow-forward" onPress={handleSubmit(onSubmit)}>
+          Login
+        </AppButton>
 
         <View>
           <Text className="mb-6 text-gray-300 text-base">

@@ -10,6 +10,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { colors } from "@/shared/colors";
 import { useRef, useState } from "react";
 import clsx from "clsx";
+import { ErroMessage } from "../error-message";
 
 interface AppInputParams<T extends FieldValues> extends TextInputProps {
   control: Control<T>;
@@ -40,7 +41,7 @@ export const Input = <T extends FieldValues>({
     <Controller
       control={control}
       name={name}
-      render={({ field: { onChange, value } }) => {
+      render={({ field: { onChange, value }, fieldState: { error } }) => {
         return (
           <View className="w-full mt-4">
             {label && (
@@ -87,6 +88,8 @@ export const Input = <T extends FieldValues>({
                 </TouchableOpacity>
               )}
             </TouchableOpacity>
+
+            {error && <ErroMessage>{error.message}</ErroMessage>}
           </View>
         );
       }}
