@@ -6,6 +6,8 @@ import { useNavigation, type NavigationProp } from "@react-navigation/native";
 import { useForm } from "react-hook-form";
 import { Text, View } from "react-native";
 import { schema } from "./ schame";
+import { useAuthContext } from "@/context/auth-context";
+import { AxiosError } from "axios";
 
 export interface FormRegisterParams {
   email: string;
@@ -28,9 +30,23 @@ export const RegisterForm = ({}) => {
     },
     resolver: zodResolver(schema),
   });
-
+  const { handleRegister } = useAuthContext();
   const navigation = useNavigation<NavigationProp<PublicStackParamsList>>();
 
+  const onSubmit = async ({
+    confirmPassword,
+    email,
+    name,
+    password,
+  }: FormRegisterParams) => {
+    try {
+      await handleRegister({ confirmPassword, email, name, password });
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        console.log(error.response?.data);
+      }
+    }
+  };
   return (
     <>
       <Input
@@ -52,12 +68,22 @@ export const RegisterForm = ({}) => {
         name="password"
         leftIconName="mail-outline"
         label="SENHA"
+        placeholder="Sua senha"
+        secureTextEntry
+      />
+      <Input
+        control={control}
+        name="confirmPassword"
+        leftIconName="mail-outline"
+        label="SENHA"
         placeholder="Confirme sua senha"
         secureTextEntry
       />
 
       <View className="flex-1 justify-between mt-8 mb-6 min-h-[250px]">
-        <AppButton iconName="arrow-forward">Cadastrar</AppButton>
+        <AppButton iconName="arrow-forward" onPress={handleSubmit(onSubmit)}>
+          Cadastrar
+        </AppButton>
 
         <View>
           <Text className="mb-6 text-gray-300 text-base">
