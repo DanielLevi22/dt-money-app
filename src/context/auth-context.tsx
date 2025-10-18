@@ -9,6 +9,8 @@ import {
 } from "react";
 import * as authService from "@/shared/services/dt-money/auth-service";
 import type { IUSer } from "@/shared/interfaces/user-interface";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import type { IAuthenticateResponse } from "@/shared/interfaces/https/authenticate-response";
 
 type AuthContextType = {
   user: IUSer | null;
@@ -16,6 +18,7 @@ type AuthContextType = {
   handleAuthenticate: (params: FormLoginParams) => Promise<void>;
   handleRegister: (params: FormRegisterParams) => Promise<void>;
   handleLogout: () => void;
+  restoreUserSession: () => Promise<string | null>;
 };
 
 export const AuthContext = createContext<AuthContextType>(
@@ -28,6 +31,11 @@ export const AuthContextProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const handleAuthenticate = async ({ email, password }: FormLoginParams) => {
     const { user, token } = await authService.authenticate({ email, password });
+
+    await AsyncStorage.setItem(
+      "dt-money-user",
+      JSON.stringify({ user, token })
+    );
     setUser(user);
     setToken(token);
   };
@@ -44,13 +52,31 @@ export const AuthContextProvider: FC<PropsWithChildren> = ({ children }) => {
       name,
       password,
     });
+    await AsyncStorage.setItem(
+      "dt-money-user",
+      JSON.stringify({ user, token })
+    );
+
     setUser(user);
     setToken(token);
   };
 
   const handleLogout = async () => {
+    await AsyncStorage.clear();
     setUser(null);
     setToken(null);
+  };
+
+  const restoreUserSession = async () => {
+    const userData = await AsyncStorage.getItem("dt-money-user");
+
+    if (userData) {
+      const { token, user } = JSON.parse(userData) as IAuthenticateResponse;
+      setUser(user);
+      setToken(token);
+    }
+
+    return userData;
   };
 
   return (
@@ -61,6 +87,7 @@ export const AuthContextProvider: FC<PropsWithChildren> = ({ children }) => {
         handleAuthenticate,
         handleLogout,
         handleRegister,
+        restoreUserSession,
       }}
     >
       {children}
