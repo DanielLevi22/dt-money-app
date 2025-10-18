@@ -8,28 +8,33 @@ import {
   type PropsWithChildren,
 } from "react";
 
-type AuthContext = {
+type AuthContextType = {
   user: null;
   token: string | null;
   handleAuthenticate: (params: FormLoginParams) => Promise<void>;
   handleRegister: (params: FormRegisterParams) => Promise<void>;
   handleLogout: () => void;
 };
-export const AuthContext = createContext<AuthContext>({} as AuthContext);
-const [user, setUser] = useState(null);
-const [token, setToken] = useState<string | null>(null);
 
-const handleAuthenticate = async ({ email, password }: FormLoginParams) => {};
-
-const handleRegister = async ({
-  confirmPassword,
-  email,
-  name,
-  password,
-}: FormRegisterParams) => {};
-const handleLogout = async () => {};
+export const AuthContext = createContext<AuthContextType>(
+  {} as AuthContextType
+);
 
 export const AuthContextProvider: FC<PropsWithChildren> = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState<string | null>(null);
+
+  const handleAuthenticate = async ({ email, password }: FormLoginParams) => {};
+
+  const handleRegister = async ({
+    confirmPassword,
+    email,
+    name,
+    password,
+  }: FormRegisterParams) => {};
+
+  const handleLogout = async () => {};
+
   return (
     <AuthContext.Provider
       value={{
