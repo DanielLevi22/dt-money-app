@@ -1,0 +1,6 @@
+{
+  "conventionalCommits.scopes": [
+    "create new button ",
+    "adiciona validacoes de formularios com zod"
+  ]
+}

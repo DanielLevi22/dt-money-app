@@ -7,9 +7,11 @@ import {
   type FC,
   type PropsWithChildren,
 } from "react";
+import * as authService from "@/shared/services/dt-money/auth-service";
+import type { IUSer } from "@/shared/interfaces/user-interface";
 
 type AuthContextType = {
-  user: null;
+  user: IUSer | null;
   token: string | null;
   handleAuthenticate: (params: FormLoginParams) => Promise<void>;
   handleRegister: (params: FormRegisterParams) => Promise<void>;
@@ -21,10 +23,14 @@ export const AuthContext = createContext<AuthContextType>(
 );
 
 export const AuthContextProvider: FC<PropsWithChildren> = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<IUSer | null>(null);
   const [token, setToken] = useState<string | null>(null);
 
-  const handleAuthenticate = async ({ email, password }: FormLoginParams) => {};
+  const handleAuthenticate = async ({ email, password }: FormLoginParams) => {
+    const { user, token } = await authService.authenticate({ email, password });
+    setUser(user);
+    setToken(token);
+  };
 
   const handleRegister = async ({
     confirmPassword,

@@ -6,6 +6,8 @@ import { useForm } from "react-hook-form";
 import { Text, View } from "react-native";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { schema } from "./schema";
+import { useAuthContext } from "@/context/auth-context";
+import { AxiosError } from "axios";
 export interface FormLoginParams {
   email: string;
   password: string;
@@ -23,10 +25,18 @@ export const LoginForm = () => {
     },
     resolver: zodResolver(schema),
   });
-
+  const { handleAuthenticate } = useAuthContext();
   const navigation = useNavigation<NavigationProp<PublicStackParamsList>>();
 
-  const onSubmit = () => {};
+  const onSubmit = async ({ email, password }: FormLoginParams) => {
+    try {
+      await handleAuthenticate({ email, password });
+    } catch (error) {
+      if (error instanceof AxiosError) {
+        console.log(error.response?.data);
+      }
+    }
+  };
   return (
     <>
       <Input
