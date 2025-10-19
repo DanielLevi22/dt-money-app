@@ -4,10 +4,12 @@ import type { PublicStackParamsList } from "@/routes/public-routes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigation, type NavigationProp } from "@react-navigation/native";
 import { useForm } from "react-hook-form";
-import { Text, View } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
 import { schema } from "./ schame";
 import { useAuthContext } from "@/context/auth-context";
-import { AxiosError } from "axios";
+import { useErrorHandle } from "@/shared/hooks/use-error-handler";
+import { AppError } from "@/shared/helprs/app-error";
+import { colors } from "@/shared/colors";
 
 export interface FormRegisterParams {
   email: string;
@@ -32,6 +34,7 @@ export const RegisterForm = ({}) => {
   });
   const { handleRegister } = useAuthContext();
   const navigation = useNavigation<NavigationProp<PublicStackParamsList>>();
+  const { handleError } = useErrorHandle();
 
   const onSubmit = async ({
     confirmPassword,
@@ -42,8 +45,8 @@ export const RegisterForm = ({}) => {
     try {
       await handleRegister({ confirmPassword, email, name, password });
     } catch (error) {
-      if (error instanceof AxiosError) {
-        console.log(error.response?.data);
+      if (error instanceof AppError) {
+        handleError(error, "Falha ao cadastrar");
       }
     }
   };
@@ -82,7 +85,11 @@ export const RegisterForm = ({}) => {
 
       <View className="flex-1 justify-between mt-8 mb-6 min-h-[250px]">
         <AppButton iconName="arrow-forward" onPress={handleSubmit(onSubmit)}>
-          Cadastrar
+          {isSubmitting ? (
+            <ActivityIndicator color={colors.white} />
+          ) : (
+            "Cadastrar"
+          )}
         </AppButton>
 
         <View>

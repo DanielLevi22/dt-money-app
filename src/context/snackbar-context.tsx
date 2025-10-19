@@ -1,5 +1,6 @@
 import {
   createContext,
+  useContext,
   useState,
   type FC,
   type PropsWithChildren,
@@ -39,4 +40,9 @@ export const SnackBarContextProvider: FC<PropsWithChildren> = ({
       {children}
     </SnackbarContext.Provider>
   );
+};
+
+export const useSnackBarContext = () => {
+  const context = useContext(SnackbarContext);
+  return context;
 };
